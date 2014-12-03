@@ -12,7 +12,10 @@ npm install ajax-request --save
 ```js
 request({
   url: '',
-  type: 'GET'
+  method: 'GET',
+  data: {
+    query1: 'value1'
+  }
 }, function(err, res, body) {
   
 });
