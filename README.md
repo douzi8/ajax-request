@@ -62,7 +62,12 @@ Is the filepath ignore case.
 * ``destPath`` {string} [destPath]
 
 ```js
-request.download('http://res.m.ctrip.com/html5/Content/images/57.png', function(err, res, body, filepath) {});
+request.download(
+  'http://res.m.ctrip.com/html5/Content/images/57.png', 
+  function(err, res, body, filepath) {
+  
+  }
+);
 
 request.download({
   url: '',
