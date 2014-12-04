@@ -125,7 +125,10 @@ request.download = function(options, callback) {
     options.encoding = 'binary';
   }
 
-  request(options, function(err, res, body) {
+  request({
+    url: options.url,
+    encoding: options.encoding
+  }, function(err, res, body) {
     if (err) return callback(err);
     if (res.statusCode !== 200) return callback(err, res, body);
     var destPath;
@@ -140,7 +143,11 @@ request.download = function(options, callback) {
     }
 
     if (!extname) {
-      destPath = path.join(destPath, options.extname);
+      if (/\/$/.test(destPath)) {
+        destPath +=  'index.' + options.extname;
+      } else {
+        destPath +=  '.' + options.extname;
+      }
     }
 
     if (options.ignore) {
@@ -153,7 +160,7 @@ request.download = function(options, callback) {
     }, function(err) {
       if (err) return callback(err);
 
-      callback(null, res, body);
+      callback(null, res, body, destPath);
     });
   });
 };
