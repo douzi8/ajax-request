@@ -40,10 +40,38 @@ Encoding to be used on setEncoding of response data
 
 ### .post
 The API same as request
-```
+```js
 request.post({
   url: 'url',
   data: {},
   headers: {}
 });
+```
+
+### .donwload
+#### options
+If options is string, it will download by default params.
+* ``url`` {string} Not null
+* ``encoding`` {string} [encoding='utf8']  
+If the request is image, the encoding is 'binary', otherwise it's 'utf8'.
+* ``extname`` {stringg} [exname='html']  
+If the request url don't exists extname, it will think it's html.
+* ``ignore`` {boolean} [ignore=false]
+Is the filepath ignore case. 
+* ``rootPath`` {string} [rootPath='']
+* ``destPath`` {string} [destPath]
+
+```js
+request.donwload('http://res.m.ctrip.com/html5/Content/images/57.png', function(err, res, body) {});
+
+request.donwload({
+  url: '',
+  rootPath: ''
+}, callback);
+
+request.donwload({
+  url: '',
+  destPath: '',             // If use this param, you should assign all file extname 
+  encoding: ''
+}, callback);
 ```

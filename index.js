@@ -5,7 +5,9 @@
 var http = require('http');
 var util = require('utils-extend');
 var url = require('url');
+var path = require('path');
 var querystring = require('querystring');
+var file = require('file-system');
 
 /**
  * @description
@@ -32,10 +34,10 @@ function request(options, callback) {
     options = {};
   } else {
     requestUrl = options.url;
-    delete options.url;
   }
 
   options = util.extend(defaults, options);
+  delete options.url;
 
   if (options.data) {
     if (options.method === 'GET') {
@@ -48,7 +50,8 @@ function request(options, callback) {
 
   requestUrl = url.parse(requestUrl);
   
-  ['hostname', 'port', 'path'].forEach(function(item) {
+  ['hostname', 'port', 'path', 'auth'].forEach(function(item) {
+    if (!requestUrl[item]) return;
     options[item]  = requestUrl[item];
   });
 
@@ -93,6 +96,66 @@ request.post = function(options, callback) {
 
   options.method = 'POST';
   request(options, callback);
+};
+
+/**
+ * @description
+ * Download remote resurce to local file
+ */
+request.download = function(options, callback) {
+  var defaults = {
+    rootPath: '',
+    encoding: 'utf8',
+    extname: 'html',
+    ignore: false
+  };
+
+  if (util.isString(options)) {
+    options = util.extend(defaults, {
+      url: options
+    });
+  } else {
+    options = util.extend(defaults, options);
+  }
+  
+  var extname = path.extname(options.url);
+  var imgs = ['png', 'jpeg', 'jpg', 'gif'];
+
+  if (imgs.indexOf[extname] != -1) {
+    options.encoding = 'binary';
+  }
+
+  request(options, function(err, res, body) {
+    if (err) return callback(err);
+    if (res.statusCode !== 200) return callback(err, res, body);
+    var destPath;
+    
+    if (options.destPath) {
+      destPath = options.destPath;
+    } else {
+      destPath = path.join(
+        options.rootPath, 
+        url.parse(options.url).pathname.replace(/^\//, '')
+      );
+    }
+
+    if (!extname) {
+      destPath = path.join(destPath, options.extname);
+    }
+
+    if (options.ignore) {
+      destPath = destPath.toLowerCase();
+    }
+
+    // Write file
+    file.writeFile(destPath, body, {
+      encoding: options.encoding
+    }, function(err) {
+      if (err) return callback(err);
+
+      callback(null, res, body);
+    });
+  });
 };
 
 module.exports = request;

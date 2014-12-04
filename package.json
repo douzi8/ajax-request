@@ -1,7 +1,7 @@
 {
   "name": "ajax-request",
-  "version": "1.0.1",
-  "description": "Async request for nodejs",
+  "version": "1.0.2",
+  "description": "Http request for nodejs, and it also support file download",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +16,12 @@
     "ajax",
     "http",
     "request",
-    "http download"
+    "http download",
+    "image"
+    "json",
+    "resource",
+    "download",
+    "file download"
   ],
   "author": "douzi <liaowei08@gmail.com>",
   "license": "ISC",
