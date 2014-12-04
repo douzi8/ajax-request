@@ -48,7 +48,7 @@ request.post({
 });
 ```
 
-### .donwload
+### .download
 #### options
 If options is string, it will download by default params.
 * ``url`` {string} Not null
@@ -62,14 +62,14 @@ Is the filepath ignore case.
 * ``destPath`` {string} [destPath]
 
 ```js
-request.donwload('http://res.m.ctrip.com/html5/Content/images/57.png', function(err, res, body) {});
+request.download('http://res.m.ctrip.com/html5/Content/images/57.png', function(err, res, body) {});
 
-request.donwload({
+request.download({
   url: '',
   rootPath: ''
 }, callback);
 
-request.donwload({
+request.download({
   url: '',
   destPath: '',             // If use this param, you should assign all file extname 
   encoding: ''
