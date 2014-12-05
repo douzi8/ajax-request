@@ -1,6 +1,6 @@
 {
   "name": "ajax-request",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Http request for nodejs, and it also support file download",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,9 @@
     "json",
     "resource",
     "download",
-    "file download"
+    "file download",
+    "base64",
+    "image base64"
   ],
   "author": "douzi <liaowei08@gmail.com>",
   "license": "ISC",

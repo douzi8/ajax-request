@@ -80,3 +80,14 @@ request.download({
   encoding: ''
 }, callback);
 ```
+
+### .base64
+Http request image, then callback with base64 data.
+```
+request.base64(
+  'http://res.m.ctrip.com/html5/Content/images/57.png', 
+  function(err, res, body) {
+  
+  }
+);
+```
