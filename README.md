@@ -1,3 +1,5 @@
+# ajax-request — Simplified http request
+[![NPM](https://nodei.co/npm/ajax-request.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/ajax-request/)
 ```js
 var request = require('ajax-request');
 ```
