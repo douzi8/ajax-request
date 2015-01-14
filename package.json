@@ -1,6 +1,6 @@
 {
   "name": "ajax-request",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Http request for nodejs, and it also support file download",
   "main": "index.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "grunt-contrib-jshint": "^0.10.0"
   },
   "dependencies": {
-    "file-system": "^1.2.5",
+    "file-system": "^2.0.0",
     "utils-extend": "^1.0.5"
   }
 }
