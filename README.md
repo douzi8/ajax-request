@@ -9,6 +9,11 @@ var request = require('ajax-request');
 npm install ajax-request --save
 ```
 
+### test
+```
+mocha
+```
+
 ## API
 ### request(options, callback)
 * {obejct|string} ``options`` required  
