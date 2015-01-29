@@ -19,63 +19,70 @@ var file = require('file-system');
  * request({url: '', headers: {}, method: 'POST'}, function(err, res, body) { });
  */
 function request(options, callback) {
-  var defaults = {
+  var opts = {
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'GET',
     encoding: 'utf8',
+    // If the callback body is buffer, it can hanlder document pipe simply
+    isBuffer: false,
     json: false
   };
-  var data;
 
   if (util.isString(options)) {
-    requestUrl = options;
-    options = {};
+    opts.url = options;
   } else {
-    requestUrl = options.url;
+    util.extend(opts, options);
   }
 
-  options = util.extend(defaults, options);
-  delete options.url;
-
-  if (options.data) {
-    if (options.method === 'GET') {
-      requestUrl = requestUrl + '?' + querystring.stringify(options.data);
+  // Append request data
+  if (opts.data) {
+    if (opts.method === 'GET') {
+      opts.url += '?' + querystring.stringify(opts.data);
     } else {
-      data = JSON.stringify(options.data);
-      options.headers['Content-Length'] = data.length;
+      opts.data = JSON.stringify(opts.data);
+      opts.headers['Content-Length'] = opts.data.length;
     }
   }
 
-  requestUrl = url.parse(requestUrl);
-  
-  ['hostname', 'port', 'path', 'auth'].forEach(function(item) {
-    if (!requestUrl[item]) return;
-    options[item]  = requestUrl[item];
-  });
+  // Extend request url object
+  util.extend(opts, util.pick(url.parse(opts.url), 'hostname', 'port', 'path', 'auth'));
+  delete opts.url;
 
-  var req = http.request(options, function(res) {
-    var body = '';
+  var req = http.request(opts, function(res) {
+    var body = [];
+    var size = 0;
 
-    res.setEncoding(options.encoding);
-
-    res.on('data', function (chunk) {
-      body += chunk;
+    res.on('data', function(chunk) {
+      body.push(chunk);
+      size += chunk.length;
     });
 
     res.on('end', function() {
-      if (options.json) {
-        body = JSON.parse(body);
+      var result = '';
+
+      // Buffer
+      if (opts.isBuffer) {
+        result =  Buffer.concat(body, size);
+      } else {
+        body.forEach(function(item) {
+          result += item.toString(opts.encoding);
+        });
+
+        if (opts.json) {
+          result = JSON.parse(result);
+        }
       }
-      callback(null, res, body);
+
+      callback(null, res, result);
     });
   });
 
   req.on('error', callback);
 
-  if (options.method !== 'GET' && data) {
-    req.write(data);
+  if (opts.method !== 'GET' && opts.data) {
+    req.write(opts.data);
   }
 
   req.end();
@@ -101,63 +108,48 @@ request.post = function(options, callback) {
 /**
  * @description
  * Download remote resurce to local file
+ * @example
+ * request.download({ url: 'path.png' }, function(err, res, body, filepath) {})
+ * request.download({ 
+    url: 'path.png',
+    rootPath: 'dest/path' 
+   }, function(err, res, body, filepath) {
+    
+   });
  */
 request.download = function(options, callback) {
-  var defaults = {
+  var opts = util.extend({
     rootPath: '',
-    encoding: 'utf8',
-    extname: 'html',
     ignore: false
-  };
-
-  if (util.isString(options)) {
-    options = util.extend(defaults, {
-      url: options
-    });
-  } else {
-    options = util.extend(defaults, options);
-  }
-  
-  var extname = path.extname(options.url);
-  var imgs = ['png', 'jpeg', 'jpg', 'gif'];
-
-  if (imgs.indexOf[extname] != -1) {
-    options.encoding = 'binary';
-  }
+  }, options);
 
   request({
-    url: options.url,
-    encoding: options.encoding
+    url: opts.url,
+    isBuffer: true
   }, function(err, res, body) {
     if (err) return callback(err);
     if (res.statusCode !== 200) return callback(err, res, body);
     var destPath;
-    
-    if (options.destPath) {
-      destPath = options.destPath;
+    var pathname = url.parse(options.url).pathname.replace(/^\//, '');
+
+    if (opts.destPath) {
+      if (util.isFunction(opts.destPath)) {
+        destPath = opts.destPath(path.basename(pathname));
+      } else {
+        destPath = opts.destPath;
+      }
     } else {
       destPath = path.join(
-        options.rootPath, 
-        url.parse(options.url).pathname.replace(/^\//, '')
+        options.rootPath,
+        pathname
       );
     }
 
-    if (!extname) {
-      if (/\/$/.test(destPath)) {
-        destPath +=  'index.' + options.extname;
-      } else {
-        destPath +=  '.' + options.extname;
-      }
-    }
-
-    if (options.ignore) {
+    if (opts.ignore) {
       destPath = destPath.toLowerCase();
     }
 
-    // Write file
-    file.writeFile(destPath, body, {
-      encoding: options.encoding
-    }, function(err) {
+    file.writeFile(destPath, body, function(err) {
       if (err) return callback(err);
 
       callback(null, res, body, destPath);
@@ -179,12 +171,11 @@ request.download = function(options, callback) {
 request.base64 = function(url, callback) {
   request({
     url: url,
-    encoding: 'binary'
+    isBuffer: true
   }, function (err, res, body) {
     if (err) return callback(err);
 
-    var data = 'data:' + res.headers['content-type'] + ';base64,' + 
-           new Buffer(body, 'binary').toString('base64');
+    var data = 'data:' + res.headers['content-type'] + ';base64,' + body.toString('base64');
 
     callback(err, res, data);
   });

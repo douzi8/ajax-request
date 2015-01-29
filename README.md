@@ -11,7 +11,26 @@ npm install ajax-request --save
 
 ## API
 ### request(options, callback)
+* {obejct|string} ``options`` required  
+  If the options is string, it will send get request.
+  * {string} ``options.url`` required
+  * {string} ``options.method`` [options.method=GET]  
+  The http request type
+  * {obejct} ``options.data``  
+  if the request type is `GET`, it's appended to query string of the URL, or it's sended to remote of body.
+  * {object} ``options.headers``  
+  An object containing request headers.
+  * {string} ``options.encoding``  
+  Set response data encoding
+  * {boolean} ``options.isBuffer``  [options.isBuffer=false]  
+  Parse response data to buffer
+  * {boolean} ``options.json`` [options.json=false]  
+  Parse response data to json
+* {function} ``callback`` required
+
 ```js
+request('url', function(err, res, body) {});
+
 request({
   url: '',
   method: 'GET',
@@ -21,24 +40,7 @@ request({
 }, function(err, res, body) {
   
 });
-
-request('url', function(err, res, body) {});
 ```
-#### options
-if options is string, it will send a get http request, otherwise it's object
-* ``url`` {string} [url]   
- not empty
-* ``method``  {string} [method=GET]  
-The http request type
-* ``data``  {object} [data]  
-if the request type is `GET`, it's appended to query string of the URL, or it's sended to remote of body.
-* ``headers`` {object} [headers = { 'Content-Type': 'application/json' }]  
-An object containing request headers.
-* ``encoding`` {string} [encoding=utf8]  
-Encoding to be used on setEncoding of response data
-
-#### callback
-
 
 ### .post
 The API same as request
@@ -51,41 +53,37 @@ request.post({
 ```
 
 ### .download
-#### options
-If options is string, it will download by default params.
-* ``url`` {string} Not null
-* ``encoding`` {string} [encoding='utf8']  
-If the request is image, the encoding is 'binary', otherwise it's 'utf8'.
-* ``extname`` {stringg} [exname='html']  
-If the request url don't exists extname, it will think it's html.
-* ``ignore`` {boolean} [ignore=false]
-Is the filepath ignore case. 
-* ``rootPath`` {string} [rootPath='']
-* ``destPath`` {string} [destPath]
+* {obejct} ``options`` required
+  * ``options.url`` {string} required
+  * ``options.ignore`` {boolean} [options.ignore=false]  
+  Is the filepath ignore case. 
+  * ``options.rootPath`` {string} [options.rootPath='']  
+  The root of dest path
+  * ``options.destPath`` {string|function}  
+  Custom the download path.
+* {function} ``callback`` required
 
 ```js
-request.download(
-  'http://res.m.ctrip.com/html5/Content/images/57.png', 
-  function(err, res, body, filepath) {
-  
-  }
-);
-
 request.download({
-  url: '',
+  url: 'path/index.png',
   rootPath: ''
-}, callback);
+}, function(err, res, body, destpath) {});
 
 request.download({
-  url: '',
-  destPath: '',             // If use this param, you should assign all file extname 
-  encoding: ''
-}, callback);
+  url: 'path/index.png',
+  destPath: function(filename) {
+    return filename;
+  }
+}, function(err, res, body, destpath) { });
+
 ```
 
 ### .base64
 Http request image, then callback with base64 data.
-```
+* {string} ``url`` required
+* {function} ``callback`` required
+
+```js
 request.base64(
   'http://res.m.ctrip.com/html5/Content/images/57.png', 
   function(err, res, body) {

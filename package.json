@@ -1,10 +1,10 @@
 {
   "name": "ajax-request",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Http request for nodejs, and it also support file download",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -28,11 +28,14 @@
   "author": "douzi <liaowei08@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.10.2",
+    "express": "^4.11.1",
     "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.10.0"
+    "grunt-contrib-jshint": "^0.10.0",
+    "serve-static": "^1.8.1"
   },
   "dependencies": {
     "file-system": "^2.0.0",
-    "utils-extend": "^1.0.5"
+    "utils-extend": "^1.0.7"
   }
 }
