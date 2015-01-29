@@ -47,7 +47,7 @@ request({
 });
 ```
 
-### .post
+### .post(options, callback)
 The API same as request
 ```js
 request.post({
@@ -57,7 +57,7 @@ request.post({
 });
 ```
 
-### .download
+### .download(options, callback)
 * {obejct} ``options`` required
   * ``options.url`` {string} required
   * ``options.ignore`` {boolean} [options.ignore=false]  
@@ -83,7 +83,7 @@ request.download({
 
 ```
 
-### .base64
+### .base64(url, callback)
 Http request image, then callback with base64 data.
 * {string} ``url`` required
 * {function} ``callback`` required
