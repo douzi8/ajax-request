@@ -157,28 +157,4 @@ request.download = function(options, callback) {
   });
 };
 
-/**
- * @description
- * Http request image, then callback with base64 data.
- * @example
- * request.base64(
- *   'https://www.google.com/images/errors/logo_sm_2_hr.png', 
- *   function(err, res, body) {
- * 
- *   }
- * );
- */
-request.base64 = function(url, callback) {
-  request({
-    url: url,
-    isBuffer: true
-  }, function (err, res, body) {
-    if (err) return callback(err);
-
-    var data = 'data:' + res.headers['content-type'] + ';base64,' + body.toString('base64');
-
-    callback(err, res, data);
-  });
-};
-
 module.exports = request;

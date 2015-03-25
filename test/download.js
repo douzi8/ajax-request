@@ -134,6 +134,8 @@ describe('Download request', function() {
     });
   });
 
+
+
   afterEach(function(){
     server.close();
     fs.rmdirSync(rootPath);

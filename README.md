@@ -84,15 +84,4 @@ request.download({
 ```
 
 ### .base64(url, callback)
-Http request image, then callback with base64 data.
-* {string} ``url`` required
-* {function} ``callback`` required
-
-```js
-request.base64(
-  'http://res.m.ctrip.com/html5/Content/images/57.png', 
-  function(err, res, body) {
-  
-  }
-);
-```
+Deprecated, move to [base64](https://github.com/douzi8/base64-img#requestbase64url-callback)
