@@ -35,7 +35,7 @@
     "serve-static": "^1.8.1"
   },
   "dependencies": {
-    "file-system": "^2.0.0",
+    "file-system": "^2.1.1",
     "utils-extend": "^1.0.7"
   }
 }
