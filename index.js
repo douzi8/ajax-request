@@ -66,9 +66,13 @@ function request(options, callback) {
       if (opts.isBuffer) {
         result =  Buffer.concat(body, size);
       } else {
-        body.forEach(function(item) {
-          result += item.toString(opts.encoding);
-        });
+        var buffer = new Buffer(size);
+        for (var i = 0, pos = 0, l = body.length; i < l; i++) {
+          var chunk = body[i];
+          chunk.copy(buffer, pos);
+          pos += chunk.length;
+        }
+        result = buffer.toString(opts.encoding);
 
         if (opts.json) {
           result = JSON.parse(result);
