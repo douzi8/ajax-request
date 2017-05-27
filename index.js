@@ -42,7 +42,7 @@ function request(options, callback) {
       opts.url += '?' + querystring.stringify(opts.data);
     } else {
       opts.data = JSON.stringify(opts.data);
-      opts.headers['Content-Length'] = opts.data.length;
+      opts.headers['Content-Length'] = new Buffer(opts.data).length;
     }
   }
 
