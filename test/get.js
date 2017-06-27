@@ -56,6 +56,21 @@ describe('Http get', function() {
     });
   });
 
+  it('中文乱码', (done) => {
+    request({
+      url: 'http://127.0.0.1:3100/chinese',
+      json: true
+    }, function(err, res, body) {
+      assert(util.isObject(body));
+
+      assert.deepEqual(body, {
+        v: '2010款1.6L 手动逸俊版'
+      });
+
+      done();
+    });
+  })
+
   afterEach(function(){
     server.close();
   });

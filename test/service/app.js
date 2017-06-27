@@ -20,6 +20,12 @@ app.get('/json', function(req, res) {
   });
 });
 
+app.get('/chinese', (req, res) => {
+  res.send({
+    v: '2010款1.6L 手动逸俊版'
+  })
+})
+
 app.get('/querystring', function(req, res) {
   res.send(req.query);
 });
