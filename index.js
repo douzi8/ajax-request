@@ -41,7 +41,21 @@ function request(options, callback) {
     if (opts.method === 'GET') {
       opts.url += '?' + querystring.stringify(opts.data);
     } else {
-      opts.data = JSON.stringify(opts.data);
+      //OSLL: Format the POST body according to its 'Content-Type'
+      switch(opts.headers['Content-Type'])
+      {
+        case "application/x-www-form-urlencoded":
+          opts.data = request._toKeyValue(opts.data);
+          break;
+        
+        case "application/json":
+          opts.data = JSON.stringify(opts.data);
+          break;
+
+        default:
+          //OSLL: Raw content... unprocessed 'opts.data'
+          break;
+      }	  
       opts.headers['Content-Length'] = new Buffer(opts.data).length;
     }
   }
@@ -90,6 +104,23 @@ function request(options, callback) {
   }
 
   req.end();
+}
+
+/**
+ * @description
+ * Returns a url type key pair value like "key1=value1&key2=value2"
+ * @example
+ * request._toKeyValue({key1:value1, key2:value2});
+ */
+request._toKeyValue = function(obj)
+{
+  var arr = [];
+  for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+          arr.push(key + '=' + obj[key]);
+      }
+  }
+  return arr.join('&');
 }
 
 /**
