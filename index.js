@@ -41,7 +41,8 @@ function request(options, callback) {
     if (opts.method === 'GET') {
       opts.url += '?' + querystring.stringify(opts.data);
     } else {
-      opts.data = JSON.stringify(opts.data);
+      if (!util.isString(opts.data))
+        opts.data = JSON.stringify(opts.data);
       opts.headers['Content-Length'] = new Buffer(opts.data).length;
     }
   }
