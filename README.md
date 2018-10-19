@@ -16,20 +16,20 @@ mocha
 
 ## API
 ### request(options, callback)
-* {obejct|string} ``options`` required  
+* {object|string} ``options`` required
   If the options is string, it will send get request.
   * {string} ``options.url`` required
-  * {string} ``options.method`` [options.method=GET]  
+  * {string} ``options.method`` [options.method=GET]
   The http request type
-  * {obejct} ``options.data``  
+  * {object} ``options.data``
   if the request type is `GET`, it's appended to query string of the URL, or it's sended to remote of body.
-  * {object} ``options.headers``  
+  * {object} ``options.headers``
   An object containing request headers.
-  * {string} ``options.encoding``  
+  * {string} ``options.encoding``
   Set response data encoding
-  * {boolean} ``options.isBuffer``  [options.isBuffer=false]  
+  * {boolean} ``options.isBuffer`` [options.isBuffer=false]
   Parse response data to buffer
-  * {boolean} ``options.json`` [options.json=false]  
+  * {boolean} ``options.json`` [options.json=false]
   Parse response data to json
 * {function} ``callback`` required
 
@@ -43,7 +43,7 @@ request({
     query1: 'value1'
   }
 }, function(err, res, body) {
-  
+
 });
 ```
 
@@ -58,13 +58,13 @@ request.post({
 ```
 
 ### .download(options, callback)
-* {obejct} ``options`` required
+* {object} ``options`` required
   * ``options.url`` {string} required
-  * ``options.ignore`` {boolean} [options.ignore=false]  
+  * ``options.ignore`` {boolean} [options.ignore=false]
   Is the filepath ignore case. 
-  * ``options.rootPath`` {string} [options.rootPath='']  
+  * ``options.rootPath`` {string} [options.rootPath='']
   The root of dest path
-  * ``options.destPath`` {string|function}  
+  * ``options.destPath`` {string|function}
   Custom the download path.
 * {function} ``callback`` required
 
